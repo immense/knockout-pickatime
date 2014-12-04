@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+  <title>Knockout Pickatime</title>
+  <link rel='stylesheet' type='text/css' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css'>
+  <link rel="stylesheet" type='text/css' href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+  <script src='http://code.jquery.com/jquery-2.1.1.min.js'></script>
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/knockout/3.1.0/knockout-min.js'></script>
+
+  <script src='knockout-pickatime.min.js'></script>
+  <script src='demo/pickatime.min.js'></script>
+  <link href='demo/pickatime.css' type='text/css' rel='stylesheet'></link>
+  <link href='demo/style.css' type='text/css' rel='stylesheet'></link>
+
+  <script type='text/javascript'>
+    $(function() {
+
+      window.view1 = {
+        time: ko.observable()
+      };
+
+      ko.applyBindings(view1, $('#simple-example-section .result')[0]);
+
+      window.view2 = {
+        time: ko.observable(),
+        pickatimeOptions: {
+          format: "hh",
+          onOpen: function() {
+            console.log('opened!')
+          }
+        }
+      };
+
+      ko.applyBindings(view2, $('#pickatime-options-example .result')[0]);
+
+      window.view3 = {
+        time: ko.observable(),
+        pickatimeOptions: {
+          clock_addon: true
+        }
+      };
+
+      ko.applyBindings(view3, $('#clock-addon-example .result')[0]);
+    });
+  </script>
+</head>
+<body>
+  <div class='container'>
+    <div class='header'>
+      <ul class='nav nav-pills pull-right'>
+        <li class='active'><a href="#">Demo</a></li>
+        <li><a href='https://github.com/immense/knockout-pickatime'>Code</a></li>
+      </ul>
+      <h3 class='text-muted'>Knockout Pickatime</h3>
+    </div>
+    <div class='jumbotron'>
+      <h1>Knockout Pickatime Demo</h1>
+    </div>
+    <div class='row'>
+      <div class='col-md-12'>
+
+        <h2><a href="#simple-example" name="simple-example">&sect;</a> Simple example</h2>
+        <section id="simple-example-section">
+          <p>Use the <code>pickatime</code> binding on any <code>input[type="text"]</code> element.</p>
+
+          <label>View Model:</label>
+          <pre>
+            window.view1 = {
+              time: ko.observable()
+            };
+
+            ko.applyBindings(view1, $('#simple-example-section .result')[0]);
+          </pre>
+
+          <label>Markup:</label>
+          <pre>
+            &lt;input type='text' data-bind='pickatime: time'&gt;
+            &lt;p&gt;
+              &lt;strong&gt;Value:&lt;/strong&gt;
+              &lt;span data-bind='text: time'&gt;&lt;/span&gt;
+            &lt;/p&gt;
+          </pre>
+
+          <h3>Result:</h3>
+          <section class="result">
+            <div class="form-horizontal">
+              <div class="form-group">
+                <label for="time-1" class="control-label col-sm-2">Time</label>
+                <div class="col-sm-10">
+                  <input id="time-1" type='text' class='form-control' data-bind='pickatime: time'>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-2">Value</label>
+                <div class="col-sm-10">
+                  <p class="form-control-static" data-bind="text: time"></p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-12">
+        <h2>Options:</h2>
+        <p>The following options can be passed as the <code>pickatime_options</code> binding:</p>
+        <h3><a href="#pickatime-options" name="pickatime-options">&sect;</a> <em>Pickatime Options</em></h3>
+        <p>
+          See <a href="http://amsul.ca/pickadate.js/time.htm#options">Pickadate</a> for a list of options available. All options specified in <code>pickatime_options</code> will be passed to pickatime.
+        </p>
+        <h4>Example:</h4>
+        <section id="pickatime-options-example">
+          <label>View Model:</label>
+          <pre>
+            <code class="javascript">
+              window.view2 = {
+                time: ko.observable(),
+                pickatimeOptions: {
+                  format: "hh",
+                  onOpen: function() {
+                    console.log('opened!')
+                  }
+                }
+              };
+
+              ko.applyBindings(view2, $('#pickatime-options-example .result')[0]);
+            </code>
+          </pre>
+
+          <label>Markup:</label>
+          <pre>
+            &lt;input type='text' data-bind='pickatime: time, pickatime_options: pickatimeOptions'&gt;
+            &lt;p&gt;
+              &lt;strong&gt;Value:&lt;/strong&gt;
+              &lt;span data-bind='text: time'&gt;&lt;/span&gt;
+            &lt;/p&gt;
+          </pre>
+          <label>Result:</label>
+          <section class="result">
+            <div class="form-horizontal">
+              <div class="form-group">
+                <label for="time-2" class="control-label col-sm-2">Time</label>
+                <div class="col-sm-10">
+                  <input id="time-2" type='text' class='form-control' data-bind='pickatime: time, pickatime_options: pickatimeOptions'>
+                  <span class="help-block">Hint: crack open the console to see some logging</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-2">Value</label>
+                <div class="col-sm-10">
+                  <p class="form-control-static" data-bind="text: time"></p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+        <hr>
+        <h3><a href="#clock-addon-option" name="clock-addon-option">&sect;</a> <em>clock_addon</em></h3>
+        <p>
+          Set to <code>true</code> to enable the clock button addon.
+          <br>
+          <em>Default:</em> <code>false</code>
+          <br>
+          <strong>Note:</strong> Requires Bootstrap 3 and Font Awesome
+        </p>
+        <h4>Example:</h4>
+        <section id="clock-addon-example">
+          <label>View Model:</label>
+          <pre>
+            window.view3 = {
+              time: ko.observable(),
+              pickatimeOptions: {
+                clock_addon: true
+              }
+            };
+
+            ko.applyBindings(view3, $('#clock-addon-example .result')[0]);
+          </pre>
+
+          <label>Markup:</label>
+          <pre>
+            &lt;input type='text' data-bind='pickatime: time, pickatime_options: pickatimeOptions'&gt;
+            &lt;p&gt;
+              &lt;strong&gt;Value:&lt;/strong&gt;
+              &lt;span data-bind='text: time'&gt;&lt;/span&gt;
+            &lt;/p&gt;
+          </pre>
+          <label>Result:</label>
+          <section class="result">
+            <div class="form-horizontal">
+              <div class="form-group">
+                <label for="time-3" class="control-label col-sm-2">Time</label>
+                <div class="col-sm-10">
+                  <input id="time-3" type='text' class='form-control' data-bind='pickatime: time, pickatime_options: pickatimeOptions'>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-2">Value</label>
+                <div class="col-sm-10">
+                  <p class="form-control-static" data-bind="text: time"></p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <h2><a href="#further-usage" name="further-usage">&sect;</a> Further Usage</h2>
+        <section id="further-usage-section">
+          <h3><a href="#programattic-access" name="programattic-access">&sect;</a> Programattic Access</h3>
+          <p>
+            The binding will automatically select the time in the time picker when the observable receives a new value as long as the format of the new value matches the format used by the timepicker.
+            <br>
+            <em>Default format: </em><code>'h:i A'</code> (e.g. <code>3:30 PM</code>)
+          </p>
+
+        </section>
+      </div>
+    </div>
+    <div class='footer'>
+      <p>&copy; Immense Networks 2014</p>
+    </div>
+  </div>
+</body>
+</html>
