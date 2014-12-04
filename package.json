@@ -1,6 +1,6 @@
 {
-  "name": "knockout-pickadate",
-  "version": "0.1.2",
+  "name": "knockout-pickatime",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "compile": "grunt"
