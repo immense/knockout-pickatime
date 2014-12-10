@@ -1,7 +1,7 @@
 (function() {
   ko.bindingHandlers.pickatime = {
     init: function(element, valueAccessor, allBindings) {
-      var $clear_button_addon, $clock_addon, key, options, options_from_binding, pickatime_options, picker, val, value, wrapper_id, _init_picker;
+      var $clear_button_addon, $clock_addon, clear_button_addon_position, clock_addon_position, key, options, options_from_binding, pickatime_options, picker, val, value, wrapper_id, _init_picker;
       value = valueAccessor();
       options = {
         clear: 'Clear',
@@ -58,9 +58,13 @@
       if (options.clear_button_addon || options.clock_addon) {
         wrapper_id = new Date().getTime();
         options.container = "#" + wrapper_id;
+        clock_addon_position = options.clock_addon === 'before' ? 'before' : 'after';
+        clear_button_addon_position = options.clear_button_addon === 'before' ? 'before' : 'after';
         $clock_addon = options.clock_addon ? $("<span class='input-group-addon'>" + "<i style='color: navy; cursor: pointer'" + "title='A time picker appears when interacting with this field'" + "class='fa fa-clock-o'>" + "</i>" + "</span>") : void 0;
         $clear_button_addon = options.clear_button_addon ? $("<span class='input-group-addon'>" + "<i style='color: navy; cursor: pointer'" + "title='Click to clear time'" + "class='fa fa-times'>" + "</i>" + "</span>") : void 0;
-        picker = _init_picker($(element).wrap($("<div id=" + wrapper_id + "></div>")).wrap($("<div class='input-group'></div>")).after($clear_button_addon).after($clock_addon));
+        picker = _init_picker($(element).wrap($("<div id=" + wrapper_id + "></div>")).wrap($("<div class='input-group'></div>")));
+        $(element)[clear_button_addon_position]($clear_button_addon);
+        $(element)[clock_addon_position]($clock_addon);
         if (options.clock_addon) {
           $clock_addon.on("click", function(event) {
             picker.open();
@@ -92,6 +96,9 @@
       ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
         if (options.clock_addon) {
           $clock_addon.off('click');
+        }
+        if (options.clear_button_addon) {
+          $clear_button_addon.off('click');
         }
         if (picker.get('start')) {
           return picker.stop();
