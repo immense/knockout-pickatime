@@ -87,30 +87,54 @@ ko.bindingHandlers.pickatime =
         .pickatime options
         .pickatime 'picker'
 
-    if options.clock_addon
+    if options.clear_button_addon or options.clock_addon
       wrapper_id = new Date().getTime()
       options.container = "##{wrapper_id}"
+      $clock_addon =
+        if options.clock_addon
+          $(
+            "<span class='input-group-addon'>" +
+              "<i style='color: navy; cursor: pointer'" +
+                "title='A time picker appears when interacting with this field'" +
+                "class='fa fa-clock-o'>" +
+              "</i>" +
+            "</span>"
+          )
+        else
+          undefined
 
-      $clock_addon = $(
-        "<span class='input-group-addon'>" +
-          "<i style='color: navy; cursor: pointer'" +
-            "title='A time picker appears when interacting with this field'" +
-            "class='fa fa-clock-o'>" +
-          "</i>" +
-        "</span>"
-      )
+      $clear_button_addon =
+        if options.clear_button_addon
+          $(
+            "<span class='input-group-addon'>" +
+              "<i style='color: navy; cursor: pointer'" +
+                "title='Click to clear time'" +
+                "class='fa fa-times'>" +
+              "</i>" +
+            "</span>"
+          )
+        else
+          undefined
 
       picker = _init_picker(
         $(element)
           .wrap $("<div id=#{wrapper_id}></div>")
           .wrap $("<div class='input-group'></div>")
+          .after $clear_button_addon
           .after $clock_addon
       )
 
-      $clock_addon.on "click", (event) ->
-        picker.open()
-        event.stopPropagation()
-        event.preventDefault()
+      if options.clock_addon
+        $clock_addon.on "click", (event) ->
+          picker.open()
+          event.stopPropagation()
+          event.preventDefault()
+
+      if options.clear_button_addon
+        $clear_button_addon.on "click", (event) ->
+          picker.set('clear')
+          event.stopPropagation()
+          event.preventDefault()
     else
       picker = _init_picker $(element)
 
