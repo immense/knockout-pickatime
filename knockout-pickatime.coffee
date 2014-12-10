@@ -90,6 +90,8 @@ ko.bindingHandlers.pickatime =
     if options.clear_button_addon or options.clock_addon
       wrapper_id = new Date().getTime()
       options.container = "##{wrapper_id}"
+      clock_addon_position = if options.clock_addon is 'before' then 'before' else 'after'
+      clear_button_addon_position = if options.clear_button_addon is 'before' then 'before' else 'after'
       $clock_addon =
         if options.clock_addon
           $(
@@ -120,9 +122,10 @@ ko.bindingHandlers.pickatime =
         $(element)
           .wrap $("<div id=#{wrapper_id}></div>")
           .wrap $("<div class='input-group'></div>")
-          .after $clear_button_addon
-          .after $clock_addon
       )
+
+      $(element)[clear_button_addon_position] $clear_button_addon
+      $(element)[clock_addon_position] $clock_addon
 
       if options.clock_addon
         $clock_addon.on "click", (event) ->
@@ -147,8 +150,13 @@ ko.bindingHandlers.pickatime =
         value item
 
     ko.utils.domNodeDisposal.addDisposeCallback element, ->
+
       if options.clock_addon
         $clock_addon.off 'click'
+
+      if options.clear_button_addon
+        $clear_button_addon.off 'click'
+
       picker.stop() if picker.get('start')
 
     return
