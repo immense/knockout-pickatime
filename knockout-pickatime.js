@@ -1,7 +1,7 @@
 (function() {
   ko.bindingHandlers.pickatime = {
     init: function(element, valueAccessor, allBindings) {
-      var $clock_addon, key, options, options_from_binding, pickatime_options, picker, val, value, wrapper_id, _init_picker;
+      var $clear_button_addon, $clock_addon, key, options, options_from_binding, pickatime_options, picker, val, value, wrapper_id, _init_picker;
       value = valueAccessor();
       options = {
         clear: 'Clear',
@@ -55,16 +55,26 @@
       _init_picker = function($elem) {
         return $elem.attr('autocomplete', 'off').pickatime(options).pickatime('picker');
       };
-      if (options.clock_addon) {
+      if (options.clear_button_addon || options.clock_addon) {
         wrapper_id = new Date().getTime();
         options.container = "#" + wrapper_id;
-        $clock_addon = $("<span class='input-group-addon'>" + "<i style='color: navy; cursor: pointer'" + "title='A time picker appears when interacting with this field'" + "class='fa fa-clock-o'>" + "</i>" + "</span>");
-        picker = _init_picker($(element).wrap($("<div id=" + wrapper_id + "></div>")).wrap($("<div class='input-group'></div>")).after($clock_addon));
-        $clock_addon.on("click", function(event) {
-          picker.open();
-          event.stopPropagation();
-          return event.preventDefault();
-        });
+        $clock_addon = options.clock_addon ? $("<span class='input-group-addon'>" + "<i style='color: navy; cursor: pointer'" + "title='A time picker appears when interacting with this field'" + "class='fa fa-clock-o'>" + "</i>" + "</span>") : void 0;
+        $clear_button_addon = options.clear_button_addon ? $("<span class='input-group-addon'>" + "<i style='color: navy; cursor: pointer'" + "title='Click to clear time'" + "class='fa fa-times'>" + "</i>" + "</span>") : void 0;
+        picker = _init_picker($(element).wrap($("<div id=" + wrapper_id + "></div>")).wrap($("<div class='input-group'></div>")).after($clear_button_addon).after($clock_addon));
+        if (options.clock_addon) {
+          $clock_addon.on("click", function(event) {
+            picker.open();
+            event.stopPropagation();
+            return event.preventDefault();
+          });
+        }
+        if (options.clear_button_addon) {
+          $clear_button_addon.on("click", function(event) {
+            picker.set('clear');
+            event.stopPropagation();
+            return event.preventDefault();
+          });
+        }
       } else {
         picker = _init_picker($(element));
       }
